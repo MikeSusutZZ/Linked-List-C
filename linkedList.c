@@ -49,7 +49,7 @@ void LLadd(struct Node *head, int n)
     curr->next = new;
     new->data = n;
     new->next = NULL;
-    printf("added  %d\n", n);
+    //printf("added  %d\n", n);
 }
 /**
  * Gets the nth element
@@ -108,6 +108,18 @@ struct Node *LLremove(struct Node *head, int n)
     }
 }
 
+struct Node* LLdup(struct Node* head){
+    struct Node* new = LLinit(head -> data);
+    struct Node *curr = head;
+    while (curr->next != NULL)
+    {
+        curr = curr->next;
+        LLadd(new, curr -> data);
+    }
+    return new;
+
+}
+
 int main()
 {
     struct Node *list = LLinit(5);
@@ -121,4 +133,6 @@ int main()
     list = LLremove(list, 0);
     LLremove(list, 4);
     LLprint(list);
+    struct Node* copy = LLdup(list);
+    LLprint(copy);
 }
