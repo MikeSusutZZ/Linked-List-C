@@ -80,13 +80,13 @@ void LLinsert(struct Node *head, int n, int d)
     new->data = d;
 }
 
-
 /**
- * removes an element at the nth element. if you are removing the head,
- * you must write as: head = LLremove(head,0);
+ * removes the nth element. 
+ * If you are removing the head,
+ * you must write as: head = LLremove(head, 0);
  * so the head is set to the correct pointer
-*/
-struct Node* LLremove(struct Node *head, int n)
+ */
+struct Node *LLremove(struct Node *head, int n)
 {
 
     if (n != 0)
@@ -103,7 +103,7 @@ struct Node* LLremove(struct Node *head, int n)
     }
     else
     {
-        return head -> next;
+        return head->next;
         free(head);
     }
 }
@@ -119,5 +119,6 @@ int main()
     printf("%d\n", LLget(list, 2)->data);
     LLinsert(list, 2, 10);
     list = LLremove(list, 0);
+    LLremove(list, 4);
     LLprint(list);
 }
