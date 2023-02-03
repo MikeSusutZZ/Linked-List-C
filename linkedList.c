@@ -16,6 +16,7 @@ void LLprint(struct Node *n)
 {
     while (n != NULL)
     {
+        //printf("n=%p\n", n);
         printf("%d, ", n->data);
         n = n->next;
     }
@@ -49,8 +50,25 @@ void LLadd(struct Node *head, int n)
     curr->next = new;
     new->data = n;
     new->next = NULL;
-    //printf("added  %d\n", n);
+    // printf("added  %d\n", n);
 }
+
+/**
+ * Removes the last element
+*/
+void LLpop(struct Node *head)
+{
+    struct Node *curr = head;
+    while (curr->next != NULL && curr->next->next != NULL)
+    {
+        curr = curr->next;
+    }
+    struct Node *pop = curr->next;
+    curr->next = NULL;
+    //printf("LLpop free=%p\n", pop);
+    free(pop);
+}
+
 /**
  * Gets the nth element
  */
@@ -81,43 +99,96 @@ void LLinsert(struct Node *head, int n, int d)
 }
 
 /**
- * removes the nth element. 
- * If you are removing the head,
- * you must write as: head = LLremove(head, 0);
- * so the head is set to the correct pointer
+ * Removes the nth element
+ * must be entered as 'LLremove(&head)'
  */
-struct Node *LLremove(struct Node *head, int n)
+void LLremove(struct Node **head, int n)
 {
-
     if (n != 0)
     {
-        struct Node *curr = head;
+        struct Node *curr = *head;
         for (int i = 0; i < n - 1; i++)
         {
             curr = curr->next;
         }
         struct Node *pop = curr->next;
         curr->next = curr->next->next;
+
         free(pop);
-        return head;
     }
     else
     {
-        return head->next;
-        free(head);
+        struct Node *hold = *head;
+        //printf("head=%p\n", *head);
+        //printf("head->next=%p\n", (*head)->next);
+        *head = (*head)->next;
+        //printf("head=%p\n", *head);
+        //printf("head->next=%p\n", (*head)->next);
+        //printf("LLremove free %p\n", hold);
+        free(hold);
     }
 }
 
-struct Node* LLdup(struct Node* head){
-    struct Node* new = LLinit(head -> data);
+
+/**
+ * Creates a copy of your list
+ */
+struct Node *LLcopy(struct Node *head)
+{
+    struct Node *new = LLinit(head->data);
     struct Node *curr = head;
     while (curr->next != NULL)
     {
         curr = curr->next;
-        LLadd(new, curr -> data);
+        LLadd(new, curr->data);
     }
     return new;
+}
 
+/**Gives int length of the length of your list*/
+int LLlen(struct Node* head){
+    int count = 0;
+    struct Node *curr = head;
+    while (curr->next != NULL)
+    {
+        curr = curr->next;
+        count++;
+    }
+    count++;
+    return count;
+}
+
+/**
+ * Cuts a list down to just within the params, both sides are inclusive
+ * head must be &head
+*/
+void LLslice(struct Node **head, int first, int last){
+    int i = 0;
+    while(i < first){
+        //printf("LLslice pre LLremove head=%p i=%d\n", *head, i);
+        LLremove(head, i);
+        //printf("LLslice post LLremove head=%p i=%d\n", *head, i);
+        //printf("removed index %d\n", i);
+        i++;
+    }
+    //printf("LLslice head=%p\n", head);
+    last -= (first);
+    int len = LLlen(*head);
+    for(int j = 0; j < len - last - 1; j++){
+        //LLprint(*head);
+        LLpop(*head);
+        //printf("LLslice head=%p\n", *head);
+    }
+
+}
+
+/**
+ * Returns a copied and sliced sublist
+*/
+struct Node* LLsublist(struct Node *head, int first, int last){
+    struct Node* copy = LLcopy(head);
+    LLslice(&copy, first, last);
+    return copy;
 }
 
 int main()
@@ -128,11 +199,7 @@ int main()
     LLadd(list, 2);
     LLadd(list, 1);
     LLprint(list);
-    printf("%d\n", LLget(list, 2)->data);
-    LLinsert(list, 2, 10);
-    list = LLremove(list, 0);
-    LLremove(list, 4);
-    LLprint(list);
-    struct Node* copy = LLdup(list);
+    struct Node* copy = LLcopy(list);
+    LLslice(&copy, 1, 3);
     LLprint(copy);
 }
