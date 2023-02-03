@@ -5,6 +5,7 @@
  */
 struct Node
 {
+    //Insert data
     int data;
     struct Node *next;
 };
@@ -16,7 +17,7 @@ void LLprint(struct Node *n)
 {
     while (n != NULL)
     {
-        //printf("n=%p\n", n);
+        //Insert data
         printf("%d, ", n->data);
         n = n->next;
     }
@@ -48,9 +49,12 @@ void LLadd(struct Node *head, int n)
     }
     struct Node *new = (struct Node *)malloc(sizeof(struct Node));
     curr->next = new;
+    //Insert data here
     new->data = n;
+
+
     new->next = NULL;
-    // printf("added  %d\n", n);
+    
 }
 
 /**
@@ -95,6 +99,7 @@ void LLinsert(struct Node *head, int n, int d)
     struct Node *new = (struct Node *)malloc(sizeof(struct Node));
     new->next = curr->next;
     curr->next = new;
+    //Insert data
     new->data = d;
 }
 
@@ -119,12 +124,7 @@ void LLremove(struct Node **head, int n)
     else
     {
         struct Node *hold = *head;
-        //printf("head=%p\n", *head);
-        //printf("head->next=%p\n", (*head)->next);
         *head = (*head)->next;
-        //printf("head=%p\n", *head);
-        //printf("head->next=%p\n", (*head)->next);
-        //printf("LLremove free %p\n", hold);
         free(hold);
     }
 }
@@ -165,19 +165,14 @@ int LLlen(struct Node* head){
 void LLslice(struct Node **head, int first, int last){
     int i = 0;
     while(i < first){
-        //printf("LLslice pre LLremove head=%p i=%d\n", *head, i);
         LLremove(head, i);
-        //printf("LLslice post LLremove head=%p i=%d\n", *head, i);
-        //printf("removed index %d\n", i);
         i++;
     }
-    //printf("LLslice head=%p\n", head);
     last -= (first);
     int len = LLlen(*head);
     for(int j = 0; j < len - last - 1; j++){
-        //LLprint(*head);
         LLpop(*head);
-        //printf("LLslice head=%p\n", *head);
+        
     }
 
 }
