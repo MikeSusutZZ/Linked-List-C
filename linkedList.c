@@ -183,6 +183,13 @@ void LLslice(struct Node **head, int first, int last){
 }
 
 /**
+ * returns the amount of data being used by malloc in Bytes
+*/
+int LLsize(struct Node *head){
+    return sizeof(struct Node) * LLlen(head);
+}
+
+/**
  * Returns a copied and sliced sublist
 */
 struct Node* LLsublist(struct Node *head, int first, int last){
