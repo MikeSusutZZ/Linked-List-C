@@ -1,14 +1,14 @@
 # Linked-List-C
 This is a collection of useful functions to help you with linked lists for C
 Functions include:
-init: start a linked list
-add: add to the end of the list
-insert: add to the middle of the list
-pop: remove from the end of the list
-remove: remove from the middle of the list
-get: returns a pointer to an element in the list
-copy: returns a duplicate of a list
-slice: cut the list down from one element to another
-sublist: returns a sliced duplicate of a list
-size: returns how many bytes are used in the list
-flip: reverses your list
+<p>init: start a linked list</p>
+<p>add: add to the end of the list</p>
+<p>insert: add to the middle of the list</p>
+<p>pop: remove from the end of the list</p>
+<p>remove: remove from the middle of the list</p>
+<p>get: returns a pointer to an element in the list</p>
+<p>copy: returns a duplicate of a list</p>
+<p>slice: cut the list down from one element to another</p>
+<p>sublist: returns a sliced duplicate of a list</p>
+<p>size: returns how many bytes are used in the list</p>
+<p>flip: reverses your list</p>
