@@ -5,24 +5,10 @@
  */
 struct Node
 {
-    //Insert data
+    // Insert data
     int data;
     struct Node *next;
 };
-
-/**
- * print off all of the elements of the list
- */
-void LLprint(struct Node *n)
-{
-    while (n != NULL)
-    {
-        //Insert data
-        printf("%d, ", n->data);
-        n = n->next;
-    }
-    printf("\n");
-}
 
 /**
  * Needed to start a list
@@ -49,17 +35,15 @@ void LLadd(struct Node *head, int n)
     }
     struct Node *new = (struct Node *)malloc(sizeof(struct Node));
     curr->next = new;
-    //Insert data here
+    // Insert data here
     new->data = n;
 
-
     new->next = NULL;
-    
 }
 
 /**
  * Removes the last element
-*/
+ */
 void LLpop(struct Node *head)
 {
     struct Node *curr = head;
@@ -69,21 +53,8 @@ void LLpop(struct Node *head)
     }
     struct Node *pop = curr->next;
     curr->next = NULL;
-    //printf("LLpop free=%p\n", pop);
+    // printf("LLpop free=%p\n", pop);
     free(pop);
-}
-
-/**
- * Gets the nth element
- */
-struct Node *LLget(struct Node *head, int n)
-{
-    struct Node *curr = head;
-    for (int i = 0; i < n; i++)
-    {
-        curr = curr->next;
-    }
-    return curr;
 }
 
 /**
@@ -99,7 +70,7 @@ void LLinsert(struct Node *head, int n, int d)
     struct Node *new = (struct Node *)malloc(sizeof(struct Node));
     new->next = curr->next;
     curr->next = new;
-    //Insert data
+    // Insert data
     new->data = d;
 }
 
@@ -129,6 +100,32 @@ void LLremove(struct Node **head, int n)
     }
 }
 
+/**
+ * Gets the nth element
+ */
+struct Node *LLget(struct Node *head, int n)
+{
+    struct Node *curr = head;
+    for (int i = 0; i < n; i++)
+    {
+        curr = curr->next;
+    }
+    return curr;
+}
+
+/**
+ * print off all of the elements of the list
+ */
+void LLprint(struct Node *n)
+{
+    while (n != NULL)
+    {
+        // Insert data
+        printf("%d, ", n->data);
+        n = n->next;
+    }
+    printf("\n");
+}
 
 /**
  * Creates a copy of your list
@@ -146,7 +143,8 @@ struct Node *LLcopy(struct Node *head)
 }
 
 /**Gives int length of the length of your list*/
-int LLlen(struct Node* head){
+int LLlen(struct Node *head)
+{
     int count = 0;
     struct Node *curr = head;
     while (curr->next != NULL)
@@ -161,36 +159,60 @@ int LLlen(struct Node* head){
 /**
  * Cuts a list down to just within the params, both sides are inclusive
  * head must be &head
-*/
-void LLslice(struct Node **head, int first, int last){
+ */
+void LLslice(struct Node **head, int first, int last)
+{
     int i = 0;
-    while(i < first){
+    while (i < first)
+    {
         LLremove(head, i);
         i++;
     }
     last -= (first);
     int len = LLlen(*head);
-    for(int j = 0; j < len - last - 1; j++){
+    for (int j = 0; j < len - last - 1; j++)
+    {
         LLpop(*head);
-        
     }
-
-}
-
-/**
- * returns the amount of data being used by malloc in Bytes
-*/
-int LLsize(struct Node *head){
-    return sizeof(struct Node) * LLlen(head);
 }
 
 /**
  * Returns a copied and sliced sublist
-*/
-struct Node* LLsublist(struct Node *head, int first, int last){
-    struct Node* copy = LLcopy(head);
+ */
+struct Node *LLsublist(struct Node *head, int first, int last)
+{
+    struct Node *copy = LLcopy(head);
     LLslice(&copy, first, last);
     return copy;
+}
+
+/**
+ * returns the amount of data being used by malloc in Bytes
+ */
+int LLsize(struct Node *head)
+{
+    return sizeof(struct Node) * LLlen(head);
+}
+
+/**
+ * Flips the list backwards
+ * Must be given &head
+*/
+void LLflip(struct Node **head)
+{
+    struct Node *old = *head;
+    struct Node *hold = (*head)->next;
+    (*head)->next = NULL;
+    struct Node *curr = hold;
+    while (curr->next != NULL)
+    {
+        hold = curr->next;
+        curr->next = old;
+        old = curr;
+        curr = hold;
+    }
+    curr->next = old;
+    *head = curr;
 }
 
 int main()
@@ -201,7 +223,10 @@ int main()
     LLadd(list, 2);
     LLadd(list, 1);
     LLprint(list);
-    struct Node* copy = LLcopy(list);
+    struct Node *copy = LLcopy(list);
     LLslice(&copy, 1, 3);
     LLprint(copy);
+    LLprint(list);
+    LLflip(&list);
+    LLprint(list);
 }
