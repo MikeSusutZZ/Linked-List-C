@@ -1,6 +1,6 @@
 # Linked-List-C
-This is a collection of useful functions to help you with linked lists for C
-Functions include:
+<h>This is a collection of useful functions to help you with linked lists for C</h>
+<p>Functions include:</p>
 <p>init: start a linked list</p>
 <p>add: add to the end of the list</p>
 <p>insert: add to the middle of the list</p>
