@@ -11,3 +11,4 @@ copy: returns a duplicate of a list
 slice: cut the list down from one element to another
 sublist: returns a sliced duplicate of a list
 size: returns how many bytes are used in the list
+flip: reverses your list
