@@ -215,18 +215,25 @@ void LLflip(struct Node **head)
     *head = curr;
 }
 
-int main()
-{
-    struct Node *list = LLinit(5);
-    LLadd(list, 4);
-    LLadd(list, 3);
-    LLadd(list, 2);
-    LLadd(list, 1);
-    LLprint(list);
-    struct Node *copy = LLcopy(list);
-    LLslice(&copy, 1, 3);
-    LLprint(copy);
-    LLprint(list);
-    LLflip(&list);
-    LLprint(list);
+/**
+ * Returns the index of the first node with the data you want.
+ * Returns -1 if none found.
+ * 
+ * Change the return type of this
+ * to whatever it is you want to search by.
+ * 
+*/
+int LLindexOf(struct Node* head, int wanted){
+    struct Node *curr = head;
+    int index = 0;
+    while(curr != NULL){
+        if (curr -> data == wanted){
+            return index;
+        }
+        else{
+            curr = curr -> next;
+            index++;
+        }
+    }
+    return -1;
 }
