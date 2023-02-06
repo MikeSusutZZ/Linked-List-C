@@ -237,3 +237,20 @@ int LLindexOf(struct Node* head, int wanted){
     }
     return -1;
 }
+
+/**
+ * Creates a string from the data in the list
+*/
+char* LLtoString(struct Node* head){
+    char* word = malloc(LLlen(head) + 1);
+    struct Node* curr = head;
+    int i = 0;
+    while(curr != NULL){
+        //printf("%c", curr->data);
+        word[i] = curr->data;
+        curr = curr->next;
+        i++;
+    }
+    word[i + 1] = '\0';
+    return word;
+}
