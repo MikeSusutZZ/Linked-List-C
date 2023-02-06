@@ -197,7 +197,7 @@ int LLsize(struct Node *head)
 /**
  * Flips the list backwards
  * Must be given &head
-*/
+ */
 void LLflip(struct Node **head)
 {
     struct Node *old = *head;
@@ -218,20 +218,24 @@ void LLflip(struct Node **head)
 /**
  * Returns the index of the first node with the data you want.
  * Returns -1 if none found.
- * 
+ *
  * Change the return type of this
  * to whatever it is you want to search by.
- * 
-*/
-int LLindexOf(struct Node* head, int wanted){
+ *
+ */
+int LLindexOf(struct Node *head, int wanted)
+{
     struct Node *curr = head;
     int index = 0;
-    while(curr != NULL){
-        if (curr -> data == wanted){
+    while (curr != NULL)
+    {
+        if (curr->data == wanted)
+        {
             return index;
         }
-        else{
-            curr = curr -> next;
+        else
+        {
+            curr = curr->next;
             index++;
         }
     }
@@ -240,17 +244,65 @@ int LLindexOf(struct Node* head, int wanted){
 
 /**
  * Creates a string from the data in the list
-*/
-char* LLtoString(struct Node* head){
-    char* word = malloc(LLlen(head) + 1);
-    struct Node* curr = head;
+ * Don't forget to free this later!
+ */
+char *LLtoString(struct Node *head)
+{
+    char *word = malloc(LLlen(head) + 1);
+    struct Node *curr = head;
     int i = 0;
-    while(curr != NULL){
-        //printf("%c", curr->data);
+    while (curr != NULL)
+    {
+        // printf("%c", curr->data);
         word[i] = curr->data;
         curr = curr->next;
         i++;
     }
     word[i + 1] = '\0';
     return word;
+}
+
+
+/**
+ * Removes the entire list
+*/
+void LLclear(struct Node *head)
+{
+    struct Node *curr = head;
+    while (curr->next != NULL)
+    {
+        LLpop(head);
+    }
+    free(head);
+}
+
+/**
+ * Put a whole list into the middle of another list
+ * right after index n
+*/
+void LLinsertList(struct Node* head, int n, struct Node* in)
+{
+    struct Node* curr = LLget(head, n);
+    struct Node* connect = curr -> next;
+    curr ->next = in;
+    while (curr->next != NULL){
+        curr = curr -> next;
+    }
+    curr -> next = connect;
+}
+
+int main(){
+    struct Node* list = LLinit(0);
+    for(int i = 1; i < 5; i++){
+        LLadd(list, i);
+    }
+
+    struct Node* list2 = LLinit(0);
+    for(int i = 1; i < 5; i++){
+        LLadd(list2, i);
+    }
+
+    LLinsertList(list, 2, list2);
+
+    LLprint(list);
 }
