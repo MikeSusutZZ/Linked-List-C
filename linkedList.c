@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 /**
  * default Node, add data as needed
  */
@@ -128,6 +129,20 @@ void LLprint(struct Node *n)
 }
 
 /**
+ * Print off all elements of the list as a char, all together 
+*/
+void LLprintc(struct Node *n)
+{
+    while (n != NULL)
+    {
+        // Insert data
+        printf("%c", n->data);
+        n = n->next;
+    }
+    printf("\n");
+}
+
+/**
  * Creates a copy of your list
  */
 struct Node *LLcopy(struct Node *head)
@@ -165,7 +180,7 @@ void LLslice(struct Node **head, int first, int last)
     int i = 0;
     while (i < first)
     {
-        LLremove(head, i);
+        LLremove(head, 0);
         i++;
     }
     last -= (first);
@@ -266,14 +281,13 @@ char *LLtoString(struct Node *head)
 /**
  * Removes the entire list
 */
-void LLclear(struct Node *head)
-{
-    struct Node *curr = head;
-    while (curr->next != NULL)
-    {
-        LLpop(head);
+void LLclear(struct Node *head) {
+    struct Node *temp;
+    while (head -> next != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
     }
-    free(head);
 }
 
 /**
@@ -291,18 +305,32 @@ void LLinsertList(struct Node* head, int n, struct Node* in)
     curr -> next = connect;
 }
 
+/**
+ * Turns a string into a linked list
+*/
+struct Node* LLstrToList(char* str){
+    struct Node* list = (struct Node *)malloc(sizeof(struct Node));
+    list = LLinit(str[0]);
+    for(int i = 1; i < strlen(str); i++){
+        LLadd(list, str[i]);
+    }
+    return list;
+}
+
+
+
 int main(){
     struct Node* list = LLinit(0);
-    for(int i = 1; i < 5; i++){
+    for(int i = 1; i < 20; i++){
         LLadd(list, i);
     }
+    //LLprint(list);
 
-    struct Node* list2 = LLinit(0);
-    for(int i = 1; i < 5; i++){
-        LLadd(list2, i);
+    for(int i = 0; i < 20; i++){
+        for (int j = i + 1; j < 20; j++){
+            struct Node* cut = LLsublist(list, i, j - 1);
+            LLprint(cut);
+            LLclear(cut);
+        }
     }
-
-    LLinsertList(list, 2, list2);
-
-    LLprint(list);
 }
