@@ -59,20 +59,27 @@ void LLpop(struct Node *head)
 }
 
 /**
- * Puts a new element at index n
+ * Puts a new element at a chosen index
+ * (must be passed &head)
  */
-void LLinsert(struct Node *head, int n, int d)
+void LLinsert(struct Node **head, int index, int data)
 {
-    struct Node *curr = head;
-    for (int i = 0; i < n - 1; i++)
+    struct Node *curr = *head;
+    struct Node *new = (struct Node *)malloc(sizeof(struct Node));
+    if (index != 0){
+    for (int i = 0; i < index - 1; i++)
     {
         curr = curr->next;
     }
-    struct Node *new = (struct Node *)malloc(sizeof(struct Node));
+    
     new->next = curr->next;
-    curr->next = new;
+    curr->next = new;}
+    else {
+        new -> next = curr;
+        *head = new;
+    }
     // Insert data
-    new->data = d;
+    new->data = data;
 }
 
 /**
@@ -435,3 +442,10 @@ struct Node *LLstrToList(char *str)
     return list;
 }
 
+int main(){
+    struct Node* list = LLinit(1);
+    LLadd(list, 2);
+    LLadd(list, 3);
+    LLinsert(&list, 0, 0);
+    LLprint(list);
+}
