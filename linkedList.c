@@ -115,6 +115,22 @@ struct Node *LLget(struct Node *head, int n)
 }
 
 /**
+ * Takes the node at index n out of the list
+ * and then returns it
+ */
+struct Node *LLpull(struct Node *head, int n)
+{
+    struct Node *curr = head;
+    for (int i = 0; i < n - 1; i++)
+    {
+        curr = curr->next;
+    }
+    struct Node *save = curr->next;
+    curr->next = curr->next->next;
+    return save;
+}
+
+/**
  * print off all of the elements of the list
  */
 void LLprint(struct Node *n)
@@ -129,8 +145,8 @@ void LLprint(struct Node *n)
 }
 
 /**
- * Print off all elements of the list as a char, all together 
-*/
+ * Print off all elements of the list as a char, all together
+ */
 void LLprintc(struct Node *n)
 {
     while (n != NULL)
@@ -277,13 +293,14 @@ char *LLtoString(struct Node *head)
     return word;
 }
 
-
 /**
  * Removes the entire list
-*/
-void LLclear(struct Node *head) {
+ */
+void LLclear(struct Node *head)
+{
     struct Node *temp;
-    while (head -> next != NULL) {
+    while (head->next != NULL)
+    {
         temp = head;
         head = head->next;
         free(temp);
@@ -293,74 +310,128 @@ void LLclear(struct Node *head) {
 /**
  * Put a whole list into the middle of another list
  * right after index n
-*/
-void LLinsertList(struct Node* head, int n, struct Node* in)
+ */
+void LLinsertList(struct Node *head, int n, struct Node *in)
 {
-    struct Node* curr = LLget(head, n);
-    struct Node* connect = curr -> next;
-    curr ->next = in;
-    while (curr->next != NULL){
-        curr = curr -> next;
+    struct Node *curr = LLget(head, n);
+    struct Node *connect = curr->next;
+    curr->next = in;
+    while (curr->next != NULL)
+    {
+        curr = curr->next;
     }
-    curr -> next = connect;
+    curr->next = connect;
 }
 
 /**
  * Swaps the position between 2 nodes at the given indexes
  * (must be passed &head)
-*/
-void LLswap(struct Node** head, int n, int m){
-    if (m == 0){
+ */
+void LLswap(struct Node **head, int n, int m)
+{
+    if (m == 0)
+    {
         int temp = n;
         n = m;
         m = temp;
     }
-    if (n != 0 && m != 0){
-        struct Node* firstBefore = LLget(*head, n - 1);
-        struct Node* secBefore = LLget(*head, m - 1);
-        struct Node* first = firstBefore -> next;
-        struct Node* sec = secBefore -> next;
-        firstBefore -> next = sec;
-        secBefore -> next = first;
-        struct Node* temp = first -> next;
-        first -> next = sec -> next;
-        sec -> next = temp;
-    }
-    else if (n == 0 && m != 0) {
-        struct Node* secBefore = LLget(*head, m - 1);
-        struct Node* sec = secBefore -> next;
-        struct Node* first = LLget(*head, n);
-        secBefore -> next = first;
-        struct Node* temp = first -> next;
-        first -> next = sec -> next;
-        sec -> next = temp;
+    if (n == 0)
+    {
+        struct Node *secBefore = LLget(*head, m - 1);
+        struct Node *sec = secBefore->next;
+        struct Node *first = LLget(*head, n);
+        secBefore->next = first;
+        struct Node *temp = first->next;
+        first->next = sec->next;
+        sec->next = temp;
         *head = sec;
     }
-    
+    else if (n != 0 && m != 0)
+    {
+        struct Node *firstBefore = LLget(*head, n - 1);
+        struct Node *secBefore = LLget(*head, m - 1);
+        struct Node *first = firstBefore->next;
+        struct Node *sec = secBefore->next;
+        firstBefore->next = sec;
+        secBefore->next = first;
+        struct Node *temp = first->next;
+        first->next = sec->next;
+        sec->next = temp;
+    }
+}
+
+/**
+ * Moves the position of a node at indexWanted to the indexMovedTo
+ * (must pass &head)
+ */
+void LLmove(struct Node **head, int indexWanted, int indexMovedTo)
+{
+    if (indexWanted != 0 && indexMovedTo != 0)
+    {
+        struct Node *before = LLget(*head, indexWanted - 1);
+        struct Node *target = before->next;
+        before->next = before->next->next;
+        struct Node *spot = LLget(*head, indexMovedTo - 1);
+        struct Node *save = spot->next;
+        spot->next = target;
+        target->next = save;
+    }
+    else if (indexMovedTo == 0)
+    {
+        struct Node *before = LLget(*head, indexWanted - 1);
+        struct Node *target = before->next;
+        before->next = before->next->next;
+        struct Node *save = *head;
+        *head = target;
+        target->next = save;
+    }
+    else if (indexWanted == 0)
+    {
+        struct Node *target = *head;
+        *head = (*head)->next;
+        struct Node *spot = LLget(*head, indexMovedTo - 1);
+        struct Node *save = spot->next;
+        spot->next = target;
+        target->next = save;
+    }
+}
+
+/**
+ * Sorts a linked list by the value in data
+ * from lowest to highest
+ * (must pass &head)
+ */
+void LLsort(struct Node **head)
+{
+    int len = LLlen(*head);
+    for (int i = 1; i < len; i++)
+    {
+        struct Node *curr = LLget(*head, i);
+
+        for (int j = 0; j < i; j++)
+        {
+            struct Node *check = LLget(*head, j);
+            // printf("comparing %d against %d, at indexes %d, %d\n", curr->data, check->data, i, j);
+            if (check->data > curr->data)
+            {
+                LLmove(head, i, j);
+                break;
+            }
+        }
+    }
 }
 
 /**
  * Turns a string into a linked list
-*/
-struct Node* LLstrToList(char* str){
-    struct Node* list = (struct Node *)malloc(sizeof(struct Node));
+ */
+struct Node *LLstrToList(char *str)
+{
+    struct Node *list = (struct Node *)malloc(sizeof(struct Node));
     list = LLinit(str[0]);
-    for(int i = 1; i < strlen(str); i++){
+    for (int i = 1; i < strlen(str); i++)
+    {
         LLadd(list, str[i]);
     }
     return list;
 }
 
-int main(){
-    struct Node* list = LLinit(3);
-    LLadd(list, 5);
-    LLadd(list, 1);
-    LLadd(list, 2);
-    LLprint(list);
-    LLswap(&list, 1, 3);
-    LLprint(list);
-    LLswap(&list, 0, 2);
-    LLprint(list);
-    LLswap(&list, 3, 0);
-    LLprint(list);
-}
