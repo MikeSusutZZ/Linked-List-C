@@ -306,6 +306,40 @@ void LLinsertList(struct Node* head, int n, struct Node* in)
 }
 
 /**
+ * Swaps the position between 2 nodes at the given indexes
+ * (must be passed &head)
+*/
+void LLswap(struct Node** head, int n, int m){
+    if (m == 0){
+        int temp = n;
+        n = m;
+        m = temp;
+    }
+    if (n != 0 && m != 0){
+        struct Node* firstBefore = LLget(*head, n - 1);
+        struct Node* secBefore = LLget(*head, m - 1);
+        struct Node* first = firstBefore -> next;
+        struct Node* sec = secBefore -> next;
+        firstBefore -> next = sec;
+        secBefore -> next = first;
+        struct Node* temp = first -> next;
+        first -> next = sec -> next;
+        sec -> next = temp;
+    }
+    else if (n == 0 && m != 0) {
+        struct Node* secBefore = LLget(*head, m - 1);
+        struct Node* sec = secBefore -> next;
+        struct Node* first = LLget(*head, n);
+        secBefore -> next = first;
+        struct Node* temp = first -> next;
+        first -> next = sec -> next;
+        sec -> next = temp;
+        *head = sec;
+    }
+    
+}
+
+/**
  * Turns a string into a linked list
 */
 struct Node* LLstrToList(char* str){
@@ -317,20 +351,16 @@ struct Node* LLstrToList(char* str){
     return list;
 }
 
-
-
 int main(){
-    struct Node* list = LLinit(0);
-    for(int i = 1; i < 20; i++){
-        LLadd(list, i);
-    }
-    //LLprint(list);
-
-    for(int i = 0; i < 20; i++){
-        for (int j = i + 1; j < 20; j++){
-            struct Node* cut = LLsublist(list, i, j - 1);
-            LLprint(cut);
-            LLclear(cut);
-        }
-    }
+    struct Node* list = LLinit(3);
+    LLadd(list, 5);
+    LLadd(list, 1);
+    LLadd(list, 2);
+    LLprint(list);
+    LLswap(&list, 1, 3);
+    LLprint(list);
+    LLswap(&list, 0, 2);
+    LLprint(list);
+    LLswap(&list, 3, 0);
+    LLprint(list);
 }
