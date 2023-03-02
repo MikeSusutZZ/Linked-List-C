@@ -429,6 +429,58 @@ void LLsort(struct Node **head)
 }
 
 /**
+ * Sorts a linked list by the value in chars
+ * (must pass &head)
+ */
+// void LLsortChar(struct Node **head)
+// {
+//     int len = LLlen(*head);
+//     for (int i = 1; i < len; i++)
+//     {
+//         struct Node *curr = LLget(*head, i);
+//         int go = 1;
+
+//         for (int j = 0; j < i; j++)
+//         {
+//             if (go)
+//             {
+//                 struct Node *check = LLget(*head, j);
+//                 for (int letter = 2; letter < 9; letter++)
+//                 {
+//                     //char cu = curr->data[letter];
+//                     //char ch = check->data[letter];
+//                     if (ch > cu)
+//                     {
+//                         LLmove(head, i, j);
+//                         go = 0;
+//                         break;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// struct Node* LLmergeSort(struct Node* listA, struct Node* listB){
+//     struct Node* currA = listA;
+//     struct Node* currB = listB;
+//     struct Node* ret;
+//     if (currA->data <= currB->data){
+//         ret = LLinit(currA->data);
+//         currA = currA->next;
+//     } else {
+//         ret = LLinit(currB->data);
+//         currB = currB->next;
+//     }
+//     while(currA != NULL && currB != NULL) {
+//         if (currA->data <= currB->data){
+//             ret = LLadd(ret, currA->data);
+//         currA = currA->next;
+//         }
+//     }
+// }
+
+/**
  * Turns a string into a linked list
  */
 struct Node *LLstrToList(char *str)
@@ -442,10 +494,81 @@ struct Node *LLstrToList(char *str)
     return list;
 }
 
+int LLtotal(struct Node* head){
+    int total = 0;
+    struct Node* curr = head;
+    while(curr != NULL){
+        total += curr -> data;
+        curr = curr -> next;
+    }
+}
+
+
+/**
+ * Takes 2 linked lists and puts them together sorted
+*/
+struct Node* LLmerge(struct Node* left, struct Node* right) {
+    if (left == NULL) {
+        return right;
+    }
+    if (right == NULL) {
+        return left;
+    }
+    struct Node* result = NULL;
+    if (left->data <= right->data) {
+        result = left;
+        result->next = merge(left->next, right);
+    } else {
+        result = right;
+        result->next = merge(left, right->next);
+    }
+    return result;
+}
+
+/**
+ * Separates a linked list into 2 new ones
+*/
+void LLsplit(struct Node* head, struct Node** left, struct Node** right) {
+    struct Node* slow = head;
+    struct Node* fast = head->next;
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+    *left = head;
+    *right = slow->next;
+    slow->next = NULL;
+}
+
+/**
+ * Merge sort
+ * (must be passed &head)
+*/
+void merge_sort(struct Node** head) {
+    if (*head == NULL || (*head)->next == NULL) {
+        return;
+    }
+    struct Node* left;
+    struct Node* right;
+    split(*head, &left, &right);
+    merge_sort(&left);
+    merge_sort(&right);
+    *head = merge(left, right);
+}
+
+
+
+
+
 int main(){
     struct Node* list = LLinit(1);
-    LLadd(list, 2);
+    LLadd(list, 4);
     LLadd(list, 3);
-    LLinsert(&list, 0, 0);
+    LLadd(list, 2);
+    LLprint(list);
+    merge_sort(&list);
     LLprint(list);
 }
