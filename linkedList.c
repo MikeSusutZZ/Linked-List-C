@@ -517,16 +517,17 @@ struct Node* LLmerge(struct Node* left, struct Node* right) {
     struct Node* result = NULL;
     if (left->data <= right->data) {
         result = left;
-        result->next = merge(left->next, right);
+        result->next = LLmerge(left->next, right);
     } else {
         result = right;
-        result->next = merge(left, right->next);
+        result->next = LLmerge(left, right->next);
     }
     return result;
 }
 
 /**
  * Separates a linked list into 2 new ones
+ * pass in head, and 2 other points to hold the splits
 */
 void LLsplit(struct Node* head, struct Node** left, struct Node** right) {
     struct Node* slow = head;
@@ -547,16 +548,16 @@ void LLsplit(struct Node* head, struct Node** left, struct Node** right) {
  * Merge sort
  * (must be passed &head)
 */
-void merge_sort(struct Node** head) {
+void LLmerge_sort(struct Node** head) {
     if (*head == NULL || (*head)->next == NULL) {
         return;
     }
     struct Node* left;
     struct Node* right;
-    split(*head, &left, &right);
-    merge_sort(&left);
-    merge_sort(&right);
-    *head = merge(left, right);
+    LLsplit(*head, &left, &right);
+    LLmerge_sort(&left);
+    LLmerge_sort(&right);
+    *head = LLmerge(left, right);
 }
 
 
@@ -566,9 +567,13 @@ void merge_sort(struct Node** head) {
 int main(){
     struct Node* list = LLinit(1);
     LLadd(list, 4);
+    LLadd(list, 45);
+    LLadd(list, 30);
+    LLadd(list, 25);
+    LLadd(list, 1);
     LLadd(list, 3);
     LLadd(list, 2);
     LLprint(list);
-    merge_sort(&list);
+    LLmerge_sort(&list);
     LLprint(list);
 }
