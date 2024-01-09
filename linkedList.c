@@ -501,6 +501,7 @@ int LLtotal(struct Node* head){
         total += curr -> data;
         curr = curr -> next;
     }
+    return total;
 }
 
 
